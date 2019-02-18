@@ -1,9 +1,12 @@
 {% extends 'AppBundle::base.html.twig' %}
 
-{% block title %}HOME - {{ parent() }}{% endblock %}
+{% block title %}Cookie - {{ parent() }}{% endblock %}
 
 {% block body %}
 <script src="/js/cookie.js"></script>
-<div id="test">Real Server01</div>
 
+<div>
+    <h3>Cookie Name: <span class="cookie_name">{{ cookie_name }}</span></h3>
+    <h3>Cookie Value: <span class="cookie_value">{{ cookie_value }}</span></h3>
+</div>
 {% endblock %}
