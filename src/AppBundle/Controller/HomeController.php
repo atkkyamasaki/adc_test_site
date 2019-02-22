@@ -4,9 +4,13 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use JMS\Serializer\SerializationContext;
+
 
 class HomeController extends Controller
 {
@@ -111,6 +115,91 @@ class HomeController extends Controller
             'hostname' => $host_name,
             'post_value' => $post_value,
         ]);
+    }
+
+    /**
+     * @Route("/file_upload")
+     */
+    public function fileUploadAction()
+    {
+        $host_name = gethostname();
+
+        $fileDir = "../web/image/TMP";
+        $filesArray = array();
+
+        foreach (glob($fileDir . '/{*.*}', GLOB_BRACE) as $file){
+            if (is_file($file)) {
+                array_push($filesArray, htmlspecialchars(basename($file)));
+            }
+        }
+
+        return $this->render('AppBundle:Home:file_upload.html.twig', [
+            'hostname' => $host_name,
+            'file_num' => count($filesArray),
+            'files_array' => $filesArray,
+        ]);
+
+    }
+
+    /**
+     * @Route("/file_upload/upload")
+     * @Method({"POST"})
+     */
+    public function fileUploadPostAction()
+    {
+        // $data = date("Ymd_His");
+        // $targetDir = "../web/image/TMP";
+        // $createPcapName = $data . '.pcap';
+
+        if($_FILES["file"]["tmp_name"]){
+            $postFile = "../web/image/TMP/" . $_FILES["file"]["name"];
+            // if($postFile) {
+            //     unlink($postFile);
+            // }
+            move_uploaded_file($_FILES['file']['tmp_name'], $postFile);
+        }
+
+        // Pcap 変換処理
+        // $cmd = 'fgt2eth.exe -in ' . $postFile . ' -out ' . $targetDir . $createPcapName;
+        // exec($cmd, $output);
+
+        $rotate = $this->fileRotate();
+
+        return new JsonResponse([
+            'status' => 'OK',
+            // 'file_name' => $createPcapName,
+            'rotate' => $rotate,
+        ]);
+
+    }
+
+    /**
+     * File rotate.
+     *
+     * @param string $logFilePath
+     * @return array
+     */
+    private function fileRotate()
+    {
+
+        $rotateFlag = false;
+
+        $fileDir = "../web/image/TMP";
+        $filesArray = array();
+
+        foreach (glob($fileDir . '/{*.*}', GLOB_BRACE) as $file){
+            if (is_file($file)) {
+                array_push($filesArray, htmlspecialchars(basename($file)));
+            }
+        }
+
+        while (count($filesArray) > 10) {
+            $removeFile = array_shift($filesArray);
+            unlink($fileDir . '/' . $removeFile);
+            $rotateFlag = true;
+        }
+
+        return $rotateFlag;
     }
 
     /**
