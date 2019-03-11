@@ -22,6 +22,7 @@ class HomeController extends Controller
         $host_name = gethostname();
         return $this->render('AppBundle:Home:index.html.twig', [
             'hostname' => $host_name,
+            'all_header' => getallheaders(),
         ]);
     }
 
