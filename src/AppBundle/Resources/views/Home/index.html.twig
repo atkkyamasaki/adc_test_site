@@ -4,10 +4,10 @@
 
 {% block body %}
 
-<h3>All HTTP Request Headers</h3>
+<h3>HTTP Request Header</h3>
 <div>
 {% for key, value in all_header %}
-    <p>{{ key }} : {{ value }}</p>
+    <p style="margin: 0 0 4px 16px;">{{ key }} : {{ value }}</p>
 {% endfor %}
 </div>
 

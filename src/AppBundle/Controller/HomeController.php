@@ -20,6 +20,7 @@ class HomeController extends Controller
     public function indexAction()
     {
         $host_name = gethostname();
+        // error_log('debug = ' . print_r(apache_response_headers(), true) . "\n", 3, 'C:\Users\Administrator\Desktop\debug.txt');
         return $this->render('AppBundle:Home:index.html.twig', [
             'hostname' => $host_name,
             'all_header' => getallheaders(),

@@ -8,7 +8,7 @@
 .container_history > p { margin: 12px 0 12px 32px; }
 .container_history > p > i { padding-right: 8px; }
 
-#file_drag_drop_handler { border: 2px dashed #0275d8; width: 500px; color: #92AAB0; text-align: left; vertical-align: middle; padding: 40px; margin-bottom: 40px; font-size: 1.5em; }
+#file_drag_drop_handler { border: 2px dashed #0275d8; width: 540px; color: #92AAB0; text-align: left; vertical-align: middle; padding: 40px; margin-bottom: 40px; font-size: 1.5em; }
 
 .progressBar { width: 200px; height: 22px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; display: inline-block; margin: 0px 10px 5px 5px; vertical-align: top; }
 
