@@ -120,6 +120,40 @@ class HomeController extends Controller
     }
 
     /**
+     * @Route("/api")
+     */
+    public function apiAction()
+    {
+        $host_name = gethostname();
+
+        if(isset($_POST['post_value'])){
+            $post_value = $_POST['post_value'];
+        } else {
+            $post_value = '';
+        }
+
+        return $this->render('AppBundle:Home:api.html.twig', [
+            'hostname' => $host_name,
+            'post_value' => $post_value,
+        ]);
+    }
+
+    /**
+     * @Route("/api/get")
+     * @Method({"GET"})
+     */
+    public function apiAssigneeAction()
+    {
+        $result = array(
+            "api" => "yes",
+            "method" => "get"
+        );
+
+        return new JsonResponse($result);
+    }
+
+
+    /**
      * @Route("/file_upload")
      */
     public function fileUploadAction()
