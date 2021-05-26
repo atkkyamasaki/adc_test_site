@@ -18,6 +18,7 @@ $(function () {
         console.log(data);
       },
       complete: function () {
+        window.location.href = "/db";
       }
     });
   });

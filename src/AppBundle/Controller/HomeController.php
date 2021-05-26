@@ -209,11 +209,12 @@ class HomeController extends Controller
     {
         $host_name = gethostname();
 
-        $deleteInquiry = new Inquiry();
-        $deleteInquiry->setName('test');
+        // $deleteInquiry = new Inquiry();
+        // $deleteInquiry->setName('test');
 
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($deleteInquiry);
+        $delData = $em->find('AppBundle:Inquiry', $request->request->get('id'));
+        $em->remove($delData);
         $em->flush();
 
         $em = $this->getDoctrine()->getManager();
