@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use JMS\Serializer\SerializationContext;
-
+use AppBundle\Entity\Inquiry;
 
 class HomeController extends Controller
 {
@@ -152,6 +152,49 @@ class HomeController extends Controller
         return new JsonResponse($result);
     }
 
+    /**
+     * @Route("/db")
+     */
+    public function dbAction()
+    {
+        $host_name = gethostname();
+
+        $em = $this->getDoctrine()->getManager();
+        $inquiryRepository = $em->getRepository('AppBundle:Inquiry');
+        $inquiryList = $inquiryRepository->findBy([], ['id' => 'ASC']);
+        $inquiry = $this->toArray($inquiryList);
+
+        return $this->render('AppBundle:Home:db.html.twig', [
+            'hostname' => $host_name,
+            'inquiry' => $inquiry,
+        ]);
+    }
+
+    /**
+     * Covert entity object into array.
+     *
+     * @param $entity
+     * @return array
+     */
+    private function toArray($entity)
+    {
+        return json_decode($this->serialize($entity), true);
+    }
+
+    /**
+     * Serialize entity object into json.
+     *
+     * @param object $entity
+     * @return mixed|string
+     */
+    private function serialize($entity)
+    {
+        return $this->container->get('jms_serializer')->serialize(
+            $entity,
+            'json',
+            SerializationContext::create()->enableMaxDepthChecks()->setSerializeNull(true)
+        );
+    }
 
     /**
      * @Route("/file_upload")
