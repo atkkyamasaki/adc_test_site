@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -154,10 +155,66 @@ class HomeController extends Controller
 
     /**
      * @Route("/db")
+     * @Method("get")
      */
     public function dbAction()
     {
         $host_name = gethostname();
+
+        $em = $this->getDoctrine()->getManager();
+        $inquiryRepository = $em->getRepository('AppBundle:Inquiry');
+        $inquiryList = $inquiryRepository->findBy([], ['id' => 'ASC']);
+        $inquiry = $this->toArray($inquiryList);
+
+        return $this->render('AppBundle:Home:db.html.twig', [
+            'hostname' => $host_name,
+            'inquiry' => $inquiry,
+        ]);
+    }
+
+    /**
+     * @Route("/db")
+     * @Method("post")
+     */
+    public function addDbAction(Request $request)
+    {
+        $host_name = gethostname();
+        
+        // $data = $form_test->getData();
+        $newInquiry = new Inquiry();
+        $newInquiry->setName($request->request->get('name'));
+        $newInquiry->setEmail($request->request->get('email'));
+        $newInquiry->setTell($request->request->get('tell'));
+          
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newInquiry);
+        $em->flush();
+
+        $em = $this->getDoctrine()->getManager();
+        $inquiryRepository = $em->getRepository('AppBundle:Inquiry');
+        $inquiryList = $inquiryRepository->findBy([], ['id' => 'ASC']);
+        $inquiry = $this->toArray($inquiryList);
+
+        return $this->render('AppBundle:Home:db.html.twig', [
+            'hostname' => $host_name,
+            'inquiry' => $inquiry,
+        ]);
+    }
+
+    /**
+     * @Route("/db")
+     * @Method("delete")
+     */
+    public function deleteDbAction(Request $request)
+    {
+        $host_name = gethostname();
+
+        $deleteInquiry = new Inquiry();
+        $deleteInquiry->setName('test');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($deleteInquiry);
+        $em->flush();
 
         $em = $this->getDoctrine()->getManager();
         $inquiryRepository = $em->getRepository('AppBundle:Inquiry');
