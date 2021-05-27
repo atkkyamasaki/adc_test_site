@@ -1,0 +1,18 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block title %}Serverless - {{ parent() }}{% endblock %}
+
+{% block body %}
+<script src="/js/serverless.js"></script>
+
+<h3>SERVERLESS TEST</h3>
+
+<h3>Test Data</h3>
+<input type="text" name="name">
+<button type="button" class="submit">Submit</button>
+
+<div>
+<P>Result: <span class="result"></span></P>
+</div>
+
+{% endblock %}

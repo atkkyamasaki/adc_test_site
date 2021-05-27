@@ -255,6 +255,19 @@ class HomeController extends Controller
     }
 
     /**
+     * @Route("/serverless")
+     * @Method("get")
+     */
+    public function serverlessAction()
+    {
+        $host_name = gethostname();
+
+        return $this->render('AppBundle:Home:serverless.html.twig', [
+            'hostname' => $host_name,
+        ]);
+    }
+
+    /**
      * @Route("/file_upload")
      */
     public function fileUploadAction()
